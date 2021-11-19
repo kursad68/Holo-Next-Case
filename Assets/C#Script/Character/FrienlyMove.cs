@@ -56,21 +56,18 @@ public class FrienlyMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (HandleObject.transform.childCount > 0)
         {
             isHandle = true;
-            AttackOnline = true;
-        }
-        if (AttackOnline == true)
-        {
-            transform.LookAt(EnemyGameObject.transform.position);
-            frienlyAnim.AnimationPlayTriger("Attack");
 
         }
-        else if (AttackOnline == false)
+        else
         {
             isHandle = false;
-
+        }
+        if (AttackOnline == false)
+        {
             closestRock = 100f;
             RocksList();
         }
@@ -82,23 +79,24 @@ public class FrienlyMove : MonoBehaviour
             {
                 GotoFriend();
             }
-            else if (enemyTriger == true && HandleObject.transform.childCount > 0)
+            else if (enemyTriger == true)
             {
 
                 frienlyAnim.AnimationPlayTriger("Attack");
-                isHandle = false;
-
-
             }
         }
         else
-        if (isHandle == false)
+        if(isHandle == false)
         {
             GotoRock();
         }
     }
     private void GotoFriend()
     {
+        if (EnemyGameObject == null)
+        {
+            EnemyGameObject = gm.objectEnemy[0];
+        }
         transform.LookAt(EnemyGameObject.transform.position);
         transform.position = Vector3.MoveTowards(transform.position, EnemyGameObject.transform.position, 3f * Time.deltaTime);
         frienlyAnim.AnimationPlayTriger("Move");

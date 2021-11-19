@@ -57,36 +57,28 @@ public class EnemyMove : MonoBehaviour
         if (HandleObject.transform.childCount > 0)
         {
             isHandle = true;
-            AttackOnline = true;
+         
         }
-       if (AttackOnline == true)
-        {
-            transform.LookAt(FrienlyGameObject.transform.position);
-            enemyAnim.AnimationPlayTriger("Attack");
-
+        else
+        { 
+            isHandle = false; 
         }
-        else if (AttackOnline == false)
+       if (AttackOnline == false)
         {
-            isHandle = false;
-            
             closestRock = 100f;
             RocksList();
         }
      
             if (isHandle==true)
          {
-
             if (friendTriger == false&&AttackOnline==false)
             {
                 GotoFriend();
             }
-            else if(friendTriger == true&&HandleObject.transform.childCount>0)
+            else if(friendTriger == true)
             {
-               
+                
                 enemyAnim.AnimationPlayTriger("Attack");
-                isHandle = false;
-              
-           
             }
          } else 
             if (isHandle == false)
@@ -96,6 +88,10 @@ public class EnemyMove : MonoBehaviour
     }
     private void GotoFriend()
     {
+        if (FrienlyGameObject == null)
+        {
+            FrienlyGameObject = gm.objectFriend[0];
+        }
         transform.LookAt(FrienlyGameObject.transform.position);
         transform.position = Vector3.MoveTowards(transform.position, FrienlyGameObject.transform.position, 3f * Time.deltaTime);
         enemyAnim.AnimationPlayTriger("Move");
