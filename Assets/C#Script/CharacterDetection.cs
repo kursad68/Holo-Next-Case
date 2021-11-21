@@ -24,7 +24,7 @@ public class CharacterDetection : MonoBehaviour
         if (other.gameObject.GetComponent<Enemy>())
         {
             StartCoroutine(WaitForAttack());
-           if(isFirstTriger == false) 
+           if(isFirstTriger == false && other.gameObject!=null) 
             {
                 movement.EnemyTrigerStay(other.gameObject);
                 isFirstTriger = true;
