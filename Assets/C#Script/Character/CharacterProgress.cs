@@ -20,8 +20,18 @@ public class CharacterProgress : MonoBehaviour,IDamage
         gm = EventManager.getGameManager.Invoke();
         gm.objectFriend.Add(gameObject);
     }
+    private void Update()
+    {
+        if (HandleObject.transform.childCount > 0)
+        {
+            HandleObjectİsNull = true;
+        }
+        else
+        {
+            HandleObjectİsNull = false;
+        }
+    }
 
-   
     private void OnCollisionEnter(Collision collision)
     {
         ICollectable collectableObject = collision.gameObject.GetComponent<ICollectable>();
@@ -29,7 +39,7 @@ public class CharacterProgress : MonoBehaviour,IDamage
         if (collectableObject != null&&HandleObjectİsNull==false&&demage.Attack==false)
         {
             collectableObject.collect(false, HandleObject);
-            HandleObjectİsNull = true;
+          
         }
 
     }
@@ -40,14 +50,10 @@ public class CharacterProgress : MonoBehaviour,IDamage
         {
 
             characterAnim.AnimationPlayTriger("Attack");
-            StartCoroutine(WaitForAddHandle());
+          
         }
     }
-    IEnumerator WaitForAddHandle()
-    {
-        yield return new WaitForSeconds(0.5f);
-        HandleObjectİsNull = false;
-    }
+
 
     public void Damage()
     {

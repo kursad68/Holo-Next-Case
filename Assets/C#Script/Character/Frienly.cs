@@ -6,6 +6,8 @@ public class Frienly : MonoBehaviour,IDamage
 {
     [SerializeField]
     private GameObject HandleObject;
+    [SerializeField]
+    private ParticleSystem Particle;
     public bool HandleObjectİsNull, RocksİsFlying = true;
     GameManager gameManager;
     private int Health, TryAgain;
@@ -13,6 +15,7 @@ public class Frienly : MonoBehaviour,IDamage
     public Rigidbody Rb { get { return (rb == null) ? rb = GetComponent<Rigidbody>() : rb; } }
     void Start()
     {
+        Particle.gameObject.SetActive(false);
         Health = 100;
         TryAgain = 10;
         gameManager = EventManager.getGameManager.Invoke();
@@ -52,24 +55,32 @@ public class Frienly : MonoBehaviour,IDamage
         yield return new WaitForSeconds(0.5f);
         RocksİsFlying = true;
     }
+    IEnumerator WaitForParticle()
+    {
+        Particle.gameObject.SetActive(true);
+        Particle.Play();
+        yield return new WaitForSeconds(1f);
+        Particle.gameObject.SetActive(false);
+        Health = 100;
+        int randomx = Random.Range(5, 45);
+        int randomz = Random.Range(5, 45);
+        transform.position = new Vector3(randomx, transform.position.y, randomz);
+
+    }
     private void TryAgainFunc()
     {
+        StartCoroutine(WaitForParticle());
         TryAgain--;
         if (TryAgain <= 0)
         {
             Destroy(gameObject);
         }
-        Health = 100;
-        int randomx = Random.Range(-39, 39);
-
-        int randomz = Random.Range(-56, 56);
-        transform.position = new Vector3(randomx, 1f, randomz);
 
 
     }
     public void Damage()
     {
-        int random = Random.Range(5, 25);
+        int random = Random.Range(10, 25);
         Health -= random;
         if (Health <= 0)
         {

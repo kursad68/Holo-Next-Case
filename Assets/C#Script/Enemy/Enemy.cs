@@ -6,6 +6,8 @@ public class Enemy : MonoBehaviour,IDamage
 {
     [SerializeField]
     private GameObject HandleObject;
+    [SerializeField]
+    private ParticleSystem Particle;
     public bool HandleObjectİsNull,RocksİsFlying=true;
     GameManager gameManager;
    
@@ -14,6 +16,7 @@ public class Enemy : MonoBehaviour,IDamage
     public Rigidbody Rb { get { return (rb == null) ? rb = GetComponent<Rigidbody>() : rb; } }
     void Start()
     {
+        Particle.gameObject.SetActive(false);
         Health = 100;
         TryAgain = 10;
         gameManager = EventManager.getGameManager.Invoke();
@@ -51,18 +54,28 @@ public class Enemy : MonoBehaviour,IDamage
         yield return new WaitForSeconds(0.5f);
        RocksİsFlying = true;
     }
+    IEnumerator WaitForParticle()
+    {
+        Particle.gameObject.SetActive(true);
+        Particle.Play();
+        yield return new WaitForSeconds(1f);
+        Particle.gameObject.SetActive(false);
+        Health = 100;
+        int randomx = Random.Range(5, 45);
+        int randomz = Random.Range(5, 45);
+        transform.position = new Vector3(randomx, transform.position.y, randomz);
+
+    }
     private void TryAgainFunc()
     {
+        StartCoroutine(WaitForParticle());
         TryAgain--;
         if (TryAgain <= 0)
         {
             Destroy(gameObject);
         }
-        Health = 100;
-        int randomx = Random.Range(5, 45);
-        
-        int randomz = Random.Range(5, 45);
-        transform.position = new Vector3(randomx, transform.position.y, randomz);
+
+      
       
         
     }
